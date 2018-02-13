@@ -3,7 +3,9 @@
 #Week 2
 #Pair Programming exercise
 
-
+require "colorize"
+require "colorized_string"
+require "awesome_print"
 #============ Class ========
 
 class Word
@@ -42,8 +44,8 @@ end
 
 #============ MAIN ========
 
-library = ["apples", "orange", "marker", "papers"]
-heart = [ "   .:::.   .:::.   ", "  :::::::.:::::::  ", "  :::::::::::::::  ", "   '::::::::::::'  ", "     ':::::::'    ", "        ':'      "]
+library = ["APPLES", "ORANGE", "MARKER", "PAPERS"]
+heart = [ "   .:::.   .:::.   ".colorize(:red), "  :::::::.:::::::  ".colorize(:red), "  :::::::::::::::  ".colorize(:red), "   '::::::::::::'  ".colorize(:red), "     ':::::::'    ".colorize(:red), "        ':'      ".colorize(:red)]
 
 
 
@@ -60,9 +62,9 @@ word_array = problem.word_to_array
 counter = 6 #perhaps adjust to number of unique letters in the word, we want a gameover message
 guesses = [] #wrong guesses
 
-puts "\n==================== Welcome to Word Guess Game ========================="
+puts "\n==================== Welcome to Word Guess Game ===================="
 puts "\nRules: You have #{counter} lives. If you lose lives, the heart will disapear and you will die!"
-puts "\nYour aim is to guess the word by guessing letters."
+puts "\nYour aim is to guess the word by guessing letters.".colorize(:blue)
 
 puts "\n+++++++++++++++++++++++ PLAYGAME +++++++++++++++++++++"
 
@@ -70,11 +72,12 @@ puts "\n+++++++++++++++++++++++ PLAYGAME +++++++++++++++++++++"
 
 
 #begin game, 5 times arbitrary for now
-5.times do
+36.times do
   #ART HEART
   puts
   puts heart[0..counter-1]
-  print "\n😃 Guess a letter: "
+  puts "+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + +"
+  print "\n💝 Guess a letter ➢ "
   letter = gets.chomp.upcase.to_s
 
   puts "\n \n"
@@ -90,7 +93,7 @@ puts "\n+++++++++++++++++++++++ PLAYGAME +++++++++++++++++++++"
  if word_array.include?(letter) == false
    guesses.push(letter)
    counter -= 1
-   puts "#{letter} not included!"
+   puts "     #{letter} not included!".colorize(:light_black)
  else
    word.length.times do |i|
      if letter == word_array[i]
@@ -101,20 +104,22 @@ puts "\n+++++++++++++++++++++++ PLAYGAME +++++++++++++++++++++"
 
 #output results and end game
  if word_array.include?(letter) == false && counter == 0
-   puts "you die"
+   puts "\n     💔 You die, love lost💔 "
+   puts
    exit
  elsif working_word_game.include?("_ ") == false
-   puts "Hooray, you won!"
+   puts "\n     💕 💗 💖 💞 💓 ❤️  Hooray, you won! ❤️ 💓 💞 💖 💗 💕"
+   puts
    exit
  elsif word_array.include?(letter) == true
-   puts "you did right"
+   puts "     Great job! #{letter} is included!".colorize(:magenta)
  end
 
- puts "\nLives left: " + counter.to_s
- puts
+ puts "\n     Lives left: " + counter.to_s
+
 
  #visually see letters already tried'
- print "This is your bin: "
+ print "     This is your bin: "
  guesses.each do |letter|
    print "#{letter} "
  end
@@ -122,13 +127,15 @@ puts "\n+++++++++++++++++++++++ PLAYGAME +++++++++++++++++++++"
  puts
 
  #display current progress with working word
- print "Current progress: "
+ print "     Current progress: "
  working_word_game.each do |letter|
    print "#{letter} "
  end
  puts
- puts word
- puts
+ #puts word
+
+
+
 
 end
 
