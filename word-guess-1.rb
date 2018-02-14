@@ -60,6 +60,7 @@ guesses = [] #bin for wrong guesses
 
 puts "\n========== 💒 Welcome to Valentine's Word Guess Game 💒 =========="
 puts "\nMission:"
+puts "\n  ❧" + " Your aim is to guess the #{word.length }-letter word by guessing letters.".colorize(:blue)
 puts "\n  ❧" + " Your aim is to guess the word by guessing letters.".colorize(:blue)
 puts "\nRules:"
 puts "\n  ❧ You have #{counter} lives."
@@ -92,7 +93,7 @@ puts "\n- - - - - - - - - - - - - - PLAY GAME - - - - - - - - - - - - - -"
     exit
     end
   else
-    until input =~ /^[A-Z]{1}$/i
+    until input =~ /^[A-Z]{1}$/i && guesses.include?(input) == false
       print "Guess a valid letter: "
       input = gets.chomp.upcase.to_s
     end
