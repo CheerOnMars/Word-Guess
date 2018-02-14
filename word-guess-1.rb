@@ -3,10 +3,13 @@
 #Week 2
 #Pair Programming exercise
 
+#============ GEMS ========
+
 require "colorize"
 require "colorized_string"
 require "awesome_print"
-#============ Class ========
+
+#============ CLASS ========
 
 class Word
 
@@ -34,22 +37,17 @@ class Word
     end
     return working_word
   end
-
-  # def word_isolate
-  #   :word_array = @word.chars
-  # end
-
-
 end
 
-#============ MAIN ========
+#============ STORAGE ========
 
-library = ["APPLES", "ORANGE", "MARKER", "PAPERS"]
+library = ["LOVE", 'CUPID', "HEART", "ROSES", "GALENTINE", "ROMANCE", "HYGGE", "SECURITY", "SWEETHEART", "INSURANCE", "CHOCOLATE", "ATTENTION", "FLOWERS", "ADORATION", "AFFECTION", "HONEY", "DINNER", "DRAMA", "DELUSION", "SOULMATE", "PANCAKES", "COURT", "CRUSH", "SWEETHEART", "CONSENT"]
+
 heart = [ "   .:::.   .:::.   ".colorize(:red), "  :::::::.:::::::  ".colorize(:red), "  :::::::::::::::  ".colorize(:red), "   '::::::::::::'  ".colorize(:red), "     ':::::::'    ".colorize(:red), "        ':'      ".colorize(:red)]
 
 
 
-#============ GAME ========
+#============ PLAY GAME ========
 
 word = library.sample
 problem = Word.new(word)
@@ -57,104 +55,88 @@ problem = Word.new(word)
 working_word_game = problem.working_word
 word_array = problem.word_to_array
 
+counter = 6 #set to lines in heart
+guesses = [] #bin for wrong guesses
 
+puts "\n========== 💒 Welcome to Valentine's Word Guess Game 💒 =========="
+puts "\nMission:"
+puts "\n  ❧" + " Your aim is to guess the word by guessing letters.".colorize(:blue)
+puts "\nRules:"
+puts "\n  ❧ You have #{counter} lives."
+puts "\n  ❧ If your entries are wrong, the heart will disapear and you will die!"
+puts "\n- - - - - - - - - - - - - - PLAY GAME - - - - - - - - - - - - - -"
 
-counter = 6 #perhaps adjust to number of unique letters in the word, we want a gameover message
-guesses = [] #wrong guesses
-
-puts "\n==================== Welcome to Word Guess Game ===================="
-puts "\nRules: You have #{counter} lives. If you lose lives, the heart will disapear and you will die!"
-puts "\nYour aim is to guess the word by guessing letters.".colorize(:blue)
-
-puts "\n+++++++++++++++++++++++ PLAYGAME +++++++++++++++++++++"
-
-# puts "Press esc to exit at any time"
-
-
-#begin game, 5 times arbitrary for now
 36.times do
-  #ART HEART
   puts
-  puts heart[0..counter-1]
+  puts heart[0..counter-1] #heart sinks as you do worse in the game
   puts "+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + +"
-  print "\n💝 Guess a letter ➢ "
-  letter = gets.chomp.upcase.to_s
 
-  puts "\n \n"
+  #get and hold user input to play game
+  print "\n💝 Guess a letter or try for the word ➢ "
 
-#must be valid letter not one already given
- until letter =~ /^[A-Z]{1}$/i
-   #&& guesses.include?(letter) == false
-   print "Guess a valid letter: "
-   letter = gets.chomp.upcase.to_s
- end
+  input = gets.chomp.upcase.to_s
 
- #if incorrect, keep in guesses array and counter goes down
- if word_array.include?(letter) == false
-   guesses.push(letter)
-   counter -= 1
-   puts "     #{letter} not included!".colorize(:light_black)
- else
-   word.length.times do |i|
-     if letter == word_array[i]
-       working_word_game[i] = "#{letter} "
-     end
-   end
- end
+  #option to enter word or letter and consequences for each
+  if input.length > 1 && input == word
+    puts "\n     💕 💗 💖 💞 💓 ❤️  Correct! Hooray, you won! ❤️ 💓 💞 💖 💗 💕"
+    puts
+    exit
+  elsif input.length > 1 && input != word
+    if counter >= 1
+      counter -= 1
+    puts "\n     💔 Heartbreak! You are incorrect."
+    elsif counter == 0
+    puts "\n     💔 You die, love lost💔 "
+    puts "\n In lieu of a puppy, here is the word: " + word
+    puts
+    exit
+    end
+  else
+    until input =~ /^[A-Z]{1}$/i
+      print "Guess a valid letter: "
+      input = gets.chomp.upcase.to_s
+    end
+    if word_array.include?(input) == false
+      guesses.push(input)
+      counter -= 1
+      puts "\n     #{input} not included!".colorize(:green,)
+    else
+      word.length.times do |i|
+        if input == word_array[i]
+          working_word_game[i] = "#{input} "
+        end
+      end
+    end
+  end
 
-#output results and end game
- if word_array.include?(letter) == false && counter == 0
-   puts "\n     💔 You die, love lost💔 "
+#continutaion of consequences to end game and offer feedback
+ if word_array.include?(input) == false && counter == 0
+   puts "\n     💔 Love lost, you lost 💔 "
+   puts "\n In lieu of a puppy, here is the word: " + word
    puts
    exit
  elsif working_word_game.include?("_ ") == false
    puts "\n     💕 💗 💖 💞 💓 ❤️  Hooray, you won! ❤️ 💓 💞 💖 💗 💕"
    puts
    exit
- elsif word_array.include?(letter) == true
-   puts "     Great job! #{letter} is included!".colorize(:magenta)
+ elsif word_array.include?(input) == true
+   puts "\n     Great job! #{input} is included!".colorize(:magenta)
  end
 
+#output to display lives left
  puts "\n     Lives left: " + counter.to_s
 
-
- #visually see letters already tried'
+ #output to display bin of letters already tried
  print "     This is your bin: "
- guesses.each do |letter|
-   print "#{letter} "
+ guesses.each do |input|
+   print "#{input} "
  end
-
  puts
 
- #display current progress with working word
+ #output to display current progress with working word
  print "     Current progress: "
- working_word_game.each do |letter|
-   print "#{letter} "
+ working_word_game.each do |input|
+   print "#{input} "
  end
  puts
- #puts word
-
-
-
-
 end
-
-#++++++++++++++++ Bike Rack
-#compare letter to word and adjust working word accordingly - while getting user input
-# word.length.times do |i|
-#   if letter == word_array[i]
-#     print "#{letter} "
-#     working_word_game[i] = "#{letter}"
-#   end
-# end
-
-# puts
-# print word_array
-# puts
-# print working_word_game
-# puts
-
-#counter!
-# if word_array.include?(letter) == false
-#   counter -= 1
-# end
